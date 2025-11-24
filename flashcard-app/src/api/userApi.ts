@@ -5,6 +5,7 @@ export interface SignUpDto {
   username: string;
   email: string;
   password: string;
+  confirmPassword: string;
 }
 
 export interface SignInDto {
@@ -36,6 +37,8 @@ export interface UserResponse {
   role: string;
   createdAt: string | Date;
   lastLoginAt?: string | Date | null;
+  isEmailConfirmed?: boolean;
+  passwordHash?: string; // Only returned in update response, should not be used by frontend
 }
 
 export interface ApiResponseDto<T> {
@@ -49,10 +52,10 @@ export interface ApiResponseDto<T> {
 export const userApi = {
   // Auth
   signUp: (data: SignUpDto) =>
-    apiClient.post<ApiResponseDto<AuthResponseDto>>("/user/signup", data),
+    apiClient.post<ApiResponseDto<AuthResponseDto>>("/auth/register", data),
 
   signIn: (data: SignInDto) =>
-    apiClient.post<ApiResponseDto<AuthResponseDto>>("/user/signin", data),
+    apiClient.post<ApiResponseDto<AuthResponseDto>>("/auth/login", data),
 
   // Current user actions (requires auth)
   getCurrentUser: () => apiClient.get<ApiResponseDto<UserResponse>>("/user"),
